@@ -12,7 +12,7 @@ from src import TextGenerator
 from utils import Preprocessing
 
 file = 'data/book.txt'
-window = 4
+window = 5
 
 class DatasetMaper(Dataset):
 	'''
@@ -20,8 +20,7 @@ class DatasetMaper(Dataset):
 	'''
 	def __init__(self, x, y):
 		self.x = x
-		y = np.eye(vocab_len, dtype='float')[y]
-		self.y = np.reshape(y, (y.shape[0], y.shape[2]))
+		self.y = y
 		
 	def __len__(self):
 		return len(self.x)
@@ -35,30 +34,48 @@ def train(sequences, targets):
 	model = TextGenerator()
 	
 	training_set = DatasetMaper(sequences, targets)
-	loader_training = DataLoader(training_set, batch_size=2)
+	loader_training = DataLoader(training_set, batch_size=128)
 	
-	optimizer = optim.RMSprop(model.parameters(), lr=0.01)
+	optimizer = optim.Adam(model.parameters(), lr=0.01)
 	
-	for epochs in range(1):
+	for epoch in range(20):
 	
+		predictions = []
+		
 		model.train()
 		
 		for x_batch, y_batch in loader_training:
 
 			x = x_batch.type(torch.LongTensor)
-			y = y_batch.type(torch.FloatTensor)
+			y = y_batch.type(torch.LongTensor)
 		
 			
 			y_pred = model(x)
 			
-			# loss = F.binary_cross_entropy(y_pred, y)
+			loss = F.cross_entropy(y_pred, y.squeeze())
 				
-			# optimizer.zero_grad()
+			optimizer.zero_grad()
 				
-			# loss.backward()
+			loss.backward()
 				
-			# optimizer.step()
-			break
+			optimizer.step()
+			
+			y_pred_idx = y_pred.squeeze().detach().numpy()
+			predictions += list(np.argmax(y_pred_idx, axis=1))
+			
+		acc = accuracy(targets, predictions)
+		print("Epoch: %d,  loss: %.5f, accuracy: %.5f " % (epoch, loss.item(), acc))
+		
+	torch.save(model.state_dict(), 'textGenerator.pt')
+			
+def accuracy(y_true, y_pred):
+	tp = 0
+	for true, pred in zip(y_true, y_pred):
+		if true == pred:
+			tp += 1
+			
+	return tp / len(y_true)
+		
 	
 	pass
 		
@@ -75,5 +92,9 @@ if __name__ == '__main__':
 	sequences = x.copy()
 	targets = y.copy()
 	
+	# Training
 	train(sequences, targets)
 	
+	# Loading models and restarting weights
+	model = TextGenerator()
+	model.load_state_dict(torch.load('textGenerator.pt'))
