@@ -7,18 +7,16 @@ class TextGenerator(nn.ModuleList):
 	def __init__(self):
 		super(TextGenerator, self).__init__()
 		
-		self.batch_size = 128
+		self.batch_size = 64
 		self.hidden_dim = 128
 		self.input_size = 35
 		self.num_classes = 35
-		self.sequence_len = 5
+		self.sequence_len = 20
 		
 		self.embedding = nn.Embedding(self.input_size, self.hidden_dim, padding_idx=0)
 		self.lstm_cell_1 = nn.LSTMCell(self.hidden_dim, self.hidden_dim)
 		self.lstm_cell_2 = nn.LSTMCell(self.hidden_dim, self.hidden_dim)
 		self.fc_1 = nn.Linear(self.hidden_dim, self.num_classes)
-		
-		self.softmax = nn.Softmax(dim=1)
 		
 	def forward(self, x):
 	

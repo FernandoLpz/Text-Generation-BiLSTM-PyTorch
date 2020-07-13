@@ -12,7 +12,7 @@ from src import TextGenerator
 from utils import Preprocessing
 
 file = 'data/book.txt'
-window = 5
+window = 20
 
 class DatasetMaper(Dataset):
 	'''
@@ -32,13 +32,13 @@ class DatasetMaper(Dataset):
 def train(sequences, targets):
 
 	model = TextGenerator()
-	
+
 	training_set = DatasetMaper(sequences, targets)
-	loader_training = DataLoader(training_set, batch_size=128)
+	loader_training = DataLoader(training_set, batch_size=64)
 	
 	optimizer = optim.Adam(model.parameters(), lr=0.01)
 	
-	for epoch in range(20):
+	for epoch in range(200):
 	
 		predictions = []
 		
@@ -49,7 +49,6 @@ def train(sequences, targets):
 			x = x_batch.type(torch.LongTensor)
 			y = y_batch.type(torch.LongTensor)
 		
-			
 			y_pred = model(x)
 			
 			loss = F.cross_entropy(y_pred, y.squeeze())
@@ -75,10 +74,37 @@ def accuracy(y_true, y_pred):
 			tp += 1
 			
 	return tp / len(y_true)
-		
 	
-	pass
+def generator(model, x, idx_to_char):
+	
+	model.eval()
+	
+	softmax = nn.Softmax(dim=1)
+	
+	start = np.random.randint(0, len(x)-1)
+	pattern = x[start]
+	print("Seed:")
+	print("\"", ''.join([idx_to_char[value] for value in pattern]), "\"")
+	
+	full_prediction = pattern.copy()
+	for i in range(1000):
+	
+		pattern = torch.from_numpy(pattern).type(torch.LongTensor)
+		pattern = pattern.view(1,-1)
 		
+		prediction = model(pattern)
+		prediction = softmax(prediction)
+		
+		prediction = prediction.squeeze().detach().numpy()
+		arg_max = np.argmax(prediction)
+		
+		pattern = pattern.squeeze().detach().numpy()
+		pattern = pattern[1:]
+		pattern = np.append(pattern, arg_max)
+		full_prediction = np.append(full_prediction, arg_max)
+		
+	print("Prediction: ")
+	print("\"", ''.join([idx_to_char[value] for value in full_prediction]), "\"")
 
 if __name__ == '__main__':
 
@@ -98,3 +124,4 @@ if __name__ == '__main__':
 	# Loading models and restarting weights
 	model = TextGenerator()
 	model.load_state_dict(torch.load('textGenerator.pt'))
+	generator(model, x, idx_to_char)
