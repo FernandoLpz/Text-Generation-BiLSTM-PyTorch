@@ -11,7 +11,7 @@ class TextGenerator(nn.ModuleList):
 		self.hidden_dim = 128
 		self.input_size = 35
 		self.num_classes = 35
-		self.sequence_len = 20
+		self.sequence_len = 5
 		
 		self.embedding = nn.Embedding(self.input_size, self.hidden_dim, padding_idx=0)
 		self.lstm_cell_1 = nn.LSTMCell(self.hidden_dim, self.hidden_dim)
