@@ -7,11 +7,11 @@ class TextGenerator(nn.ModuleList):
 	def __init__(self):
 		super(TextGenerator, self).__init__()
 		
-		self.batch_size = 64
+		self.batch_size = 512
 		self.hidden_dim = 128
 		self.input_size = 35
 		self.num_classes = 35
-		self.sequence_len = 5
+		self.sequence_len = 50
 		
 		self.embedding = nn.Embedding(self.input_size, self.hidden_dim, padding_idx=0)
 		self.lstm_cell_1 = nn.LSTMCell(self.hidden_dim, self.hidden_dim)

@@ -32,11 +32,10 @@ class Execution:
 
 	def __init__(self):
 		self.file = 'data/book.txt'
-		self.window = 5
-		self.batch_size = 64
+		self.window = 50
+		self.batch_size = 512
 		self.learning_rate = 0.01
-		self.num_epochs = 40
-		self.generator = 1000
+		self.num_epochs = 100
 		
 		self.sequences = None
 		self.targets = None
@@ -146,4 +145,5 @@ if __name__ == '__main__':
 	
 	model = TextGenerator()
 	model.load_state_dict(torch.load('textGenerator.pt'))
+	
 	execution.generator(model, sequences, idx_to_char, 1000)
