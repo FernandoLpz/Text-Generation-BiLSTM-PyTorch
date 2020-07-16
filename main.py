@@ -1,3 +1,6 @@
+import numpy as np
+import os
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -6,10 +9,9 @@ import torch.nn.functional as F
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 
-import numpy as np
-
 from src import TextGenerator
 from utils import Preprocessing
+from utils import parameter_parser
 
 file = 'data/book.txt'
 window = 20
@@ -30,12 +32,12 @@ class DatasetMaper(Dataset):
 
 class Execution:
 
-	def __init__(self):
+	def __init__(self, args):
 		self.file = 'data/book.txt'
-		self.window = 50
-		self.batch_size = 512
-		self.learning_rate = 0.01
-		self.num_epochs = 100
+		self.window = args.window
+		self.batch_size = args.batch_size
+		self.learning_rate = args.learning_rate
+		self.num_epochs = args.num_epochs
 		
 		self.sequences = None
 		self.targets = None
@@ -52,9 +54,9 @@ class Execution:
 		self.vocab_size = len(self.char_to_idx)
 		
 
-	def train(self):
+	def train(self, args):
 	
-		model = TextGenerator()
+		model = TextGenerator(args)
 	
 		training_set = DatasetMaper(self.sequences, self.targets)
 		loader_training = DataLoader(training_set, batch_size=self.batch_size)
@@ -89,7 +91,7 @@ class Execution:
 			
 			print("Epoch: %d,  loss: %.5f, accuracy: %.5f " % (epoch, loss.item(), accuracy))
 			
-		torch.save(model.state_dict(), 'textGenerator.pt')
+		torch.save(model.state_dict(), 'weights/textGenerator_nosymbols_1.pt')
 				
 	@staticmethod
 	def calculate_accuracy(y_true, y_pred):
@@ -135,15 +137,32 @@ class Execution:
 		print("\"", ''.join([idx_to_char[value] for value in full_prediction]), "\"")
 
 if __name__ == '__main__':
+	
+	args = parameter_parser()
+	
+	if args.load_model == True:
+		if os.path.exists(args.model):
+			
+			model = TextGenerator(args)
+			model.load_state_dict(torch.load('weights/textGenerator_nosymbols.pt'))
+			
+			execution = Execution(args)
+			execution.prepare_data()
+			
+			sequences = execution.sequences
+			idx_to_char = execution.idx_to_char
+			
+			execution.generator(model, sequences, idx_to_char, 1000)
+			
+	else:
+		execution = Execution(args)
+		execution.prepare_data()
+		execution.train(args)
 
-	execution = Execution()
-	execution.prepare_data()
-	execution.train()
-	
-	sequences = execution.sequences
-	idx_to_char = execution.idx_to_char
-	
-	model = TextGenerator()
-	model.load_state_dict(torch.load('textGenerator.pt'))
-	
-	execution.generator(model, sequences, idx_to_char, 1000)
+		sequences = execution.sequences
+		idx_to_char = execution.idx_to_char
+		
+		model = TextGenerator(args)
+		model.load_state_dict(torch.load('weights/textGenerator_nosymbols_1.pt'))
+		
+		execution.generator(model, sequences, idx_to_char, 1000)

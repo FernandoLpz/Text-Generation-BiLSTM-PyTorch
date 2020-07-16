@@ -4,14 +4,14 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class TextGenerator(nn.ModuleList):
-	def __init__(self):
+	def __init__(self, args):
 		super(TextGenerator, self).__init__()
 		
-		self.batch_size = 512
-		self.hidden_dim = 128
-		self.input_size = 35
-		self.num_classes = 35
-		self.sequence_len = 50
+		self.batch_size = args.batch_size
+		self.hidden_dim = args.hidden_dim
+		self.input_size = 27
+		self.num_classes = 27
+		self.sequence_len = args.window
 		
 		self.embedding = nn.Embedding(self.input_size, self.hidden_dim, padding_idx=0)
 		self.lstm_cell_1 = nn.LSTMCell(self.hidden_dim, self.hidden_dim)

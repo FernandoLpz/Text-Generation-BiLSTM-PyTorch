@@ -6,6 +6,9 @@ class Preprocessing:
 	@staticmethod
 	def read_dataset(file):
 		
+		letters = ['a','b','c','d','e','f','g','h','i','j','k','l','m',
+					'n','o','p','q','r','s','t','u','v','w','x','y','z',' ']
+		
 		# Open raw file
 		with open(file, 'r') as f:
 			raw_text = f.readlines()
@@ -22,7 +25,10 @@ class Preprocessing:
 		text = list()
 		for char in text_string:
 			text.append(char)
-		
+	
+		# Remove all symbosl and just keep letters
+		text = [char for char in text if char in letters]
+	
 		return text
 		
 	@staticmethod
