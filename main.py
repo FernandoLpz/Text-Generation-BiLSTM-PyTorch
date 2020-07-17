@@ -91,7 +91,7 @@ class Execution:
 			
 			print("Epoch: %d,  loss: %.5f, accuracy: %.5f " % (epoch, loss.item(), accuracy))
 			
-		torch.save(model.state_dict(), 'weights/textGenerator_nosymbols_1.pt')
+		torch.save(model.state_dict(), 'weights/textGenerator_nosymbols_dropout.pt')
 				
 	@staticmethod
 	def calculate_accuracy(y_true, y_pred):
@@ -144,7 +144,7 @@ if __name__ == '__main__':
 		if os.path.exists(args.model):
 			
 			model = TextGenerator(args)
-			model.load_state_dict(torch.load('weights/textGenerator_nosymbols.pt'))
+			model.load_state_dict(torch.load('weights/textGenerator_nosymbols_dropout.pt'))
 			
 			execution = Execution(args)
 			execution.prepare_data()
@@ -163,6 +163,6 @@ if __name__ == '__main__':
 		idx_to_char = execution.idx_to_char
 		
 		model = TextGenerator(args)
-		model.load_state_dict(torch.load('weights/textGenerator_nosymbols_1.pt'))
+		model.load_state_dict(torch.load('weights/textGenerator_nosymbols_dropout.pt'))
 		
 		execution.generator(model, sequences, idx_to_char, 1000)
