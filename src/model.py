@@ -12,19 +12,19 @@ class TextGenerator(nn.ModuleList):
 		self.input_size = 27
 		self.num_classes = 27
 		self.sequence_len = args.window
-		self.dropout = nn.Dropout(0.2)
-		self.embedding = nn.Embedding(self.input_size, self.hidden_dim*2, padding_idx=0)
-		self.lstm_cell_1 = nn.LSTMCell(self.hidden_dim*2, self.hidden_dim*2)
-		self.lstm_cell_2 = nn.LSTMCell(self.hidden_dim*2, self.hidden_dim*2)
-		self.fc_1 = nn.Linear(self.hidden_dim*2, self.num_classes)
+		self.dropout = nn.Dropout(0)
+		self.embedding = nn.Embedding(self.input_size, self.hidden_dim, padding_idx=0)
+		self.lstm_cell_1 = nn.LSTMCell(self.hidden_dim, self.hidden_dim)
+		self.lstm_cell_2 = nn.LSTMCell(self.hidden_dim, self.hidden_dim)
+		self.fc_1 = nn.Linear(self.hidden_dim, self.num_classes)
 		
 	def forward(self, x):
 	
 		# batch_size x hidden_size
-		hidden_state = torch.zeros(x.size(0), self.hidden_dim*2)
-		cell_state = torch.zeros(x.size(0), self.hidden_dim*2)
-		hidden_state_2 = torch.zeros(x.size(0), self.hidden_dim*2)
-		cell_state_2 = torch.zeros(x.size(0), self.hidden_dim*2)
+		hidden_state = torch.zeros(x.size(0), self.hidden_dim)
+		cell_state = torch.zeros(x.size(0), self.hidden_dim)
+		hidden_state_2 = torch.zeros(x.size(0), self.hidden_dim)
+		cell_state_2 = torch.zeros(x.size(0), self.hidden_dim)
 
 		# weights initialization
 		torch.nn.init.xavier_normal_(hidden_state)

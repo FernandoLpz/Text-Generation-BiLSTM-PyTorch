@@ -112,8 +112,8 @@ class Execution:
 		start = np.random.randint(0, len(sequences)-1)
 		pattern = sequences[start]
 		
-		print("Seed:")
-		print("\"", ''.join([idx_to_char[value] for value in pattern]), "\"")
+		print("Seed: \n")
+		print(''.join([idx_to_char[value] for value in pattern]), "\"")
 		
 		full_prediction = pattern.copy()
 		
