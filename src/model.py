@@ -54,4 +54,3 @@ class TextGenerator(nn.ModuleList):
 		
 		return out
 		
-		
