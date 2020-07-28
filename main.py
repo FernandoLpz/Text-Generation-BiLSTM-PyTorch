@@ -13,7 +13,7 @@ from src import TextGenerator
 from utils import Preprocessing
 from utils import parameter_parser
 
-file = 'data/book.txt'
+# file = 'data/book.txt'
 window = 20
 
 class DatasetMaper(Dataset):
@@ -48,7 +48,7 @@ class Execution:
 	def prepare_data(self):
 	
 		preprocessing = Preprocessing()
-		text = preprocessing.read_dataset(file)
+		text = preprocessing.read_dataset(self.file)
 		self.char_to_idx, self.idx_to_char = preprocessing.create_dictionary(text)
 		self.sequences, self.targets = preprocessing.build_sequences_target(text, self.char_to_idx, window=self.window)
 		self.vocab_size = len(self.char_to_idx)
@@ -91,7 +91,7 @@ class Execution:
 			
 			print("Epoch: %d,  loss: %.5f, accuracy: %.5f " % (epoch, loss.item(), accuracy))
 			
-		torch.save(model.state_dict(), 'weights/textGenerator_nosymbols_dropout.pt')
+		torch.save(model.state_dict(), 'weights/textGenerator_nosymbols_dropout_2.pt')
 				
 	@staticmethod
 	def calculate_accuracy(y_true, y_pred):
@@ -144,7 +144,7 @@ if __name__ == '__main__':
 		if os.path.exists(args.model):
 			
 			model = TextGenerator(args)
-			model.load_state_dict(torch.load('weights/textGenerator_nosymbols_dropout.pt'))
+			model.load_state_dict(torch.load('weights/textGenerator_nosymbols_dropout_2.pt'))
 			
 			execution = Execution(args)
 			execution.prepare_data()
@@ -163,6 +163,6 @@ if __name__ == '__main__':
 		idx_to_char = execution.idx_to_char
 		
 		model = TextGenerator(args)
-		model.load_state_dict(torch.load('weights/textGenerator_nosymbols_dropout.pt'))
+		model.load_state_dict(torch.load('weights/textGenerator_nosymbols_dropout_2.pt'))
 		
 		execution.generator(model, sequences, idx_to_char, 1000)
