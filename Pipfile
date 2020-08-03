@@ -8,6 +8,7 @@ verify_ssl = true
 [packages]
 torch = "*"
 numpy = "*"
+nltk = "*"
 
 [requires]
 python_version = "3.7"

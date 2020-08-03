@@ -9,14 +9,19 @@ class TextGenerator(nn.ModuleList):
 		
 		self.batch_size = args.batch_size
 		self.hidden_dim = args.hidden_dim
-		self.input_size = 27
-		self.num_classes = 27
+		# Word-level
+		self.input_size = 713
+		self.num_classes = 713
+		# char-level
+		# self.input_size = 27
+		# self.num_classes = 27
 		self.sequence_len = args.window
-		self.dropout = nn.Dropout(0)
+		self.dropout = nn.Dropout(0.2)
 		self.embedding = nn.Embedding(self.input_size, self.hidden_dim, padding_idx=0)
 		self.lstm_cell_1 = nn.LSTMCell(self.hidden_dim, self.hidden_dim)
 		self.lstm_cell_2 = nn.LSTMCell(self.hidden_dim, self.hidden_dim)
-		self.fc_1 = nn.Linear(self.hidden_dim, self.num_classes)
+		self.fc_1 = nn.Linear(self.hidden_dim, self.hidden_dim*2)
+		self.fc_2 = nn.Linear(self.hidden_dim*2, self.num_classes)
 		
 	def forward(self, x):
 	
@@ -50,6 +55,9 @@ class TextGenerator(nn.ModuleList):
 		 	
 		# Last hidden state is passed through a fully connected neural net
 		out = self.fc_1(hidden_state_2)
+		out = torch.sigmoid(out)
+		
+		out = self.fc_2(out)
 
 		
 		return out

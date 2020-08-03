@@ -1,0 +1,2 @@
+'weights/textGenerator_words_2.pt': python -B main.py --window 100 --epochs 500 --hidden_dim 32 --batch_size 512
+'weights/textGenerator_words_1.pt': python -B main.py --window 70 --epochs 200 --hidden_dim 32 --batch_size 512
