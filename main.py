@@ -1,5 +1,5 @@
-import numpy as np
 import os
+import numpy as np
 
 import torch
 import torch.nn as nn
@@ -13,8 +13,6 @@ from src import TextGenerator
 from utils import Preprocessing
 from utils import parameter_parser
 
-# file = 'data/book.txt'
-window = 20
 
 class DatasetMaper(Dataset):
 	'''
@@ -47,10 +45,22 @@ class Execution:
 		
 	def prepare_data(self):
 	
+		# Initialize preprocessor object
 		preprocessing = Preprocessing()
+		
+		# The 'file' is loaded and split by word
 		text = preprocessing.read_dataset(self.file)
+		
+		# Given 'text', it is created two dictionaries
+		# a dictiornary about: from word to index
+		# a dictorionary about: from index to word
 		self.word_to_idx, self.idx_to_word = preprocessing.create_dictionary(text)
+		
+		# Given the 'window', it is created the set of training sentences as well as
+		# the set of target words
 		self.sequences, self.targets = preprocessing.build_sequences_target(text, self.word_to_idx, window=self.window)
+		
+		# Gets the vocabuly size
 		self.vocab_size = len(self.word_to_idx)
 		
 
