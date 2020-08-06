@@ -6,53 +6,53 @@ class Preprocessing:
 	@staticmethod
 	def read_dataset(file):
 		
-		# letters = ['a','b','c','d','e','f','g','h','i','j','k','l','m',
-		# 			'n','o','p','q','r','s','t','u','v','w','x','y','z',' ']
-		
-		# # Open raw file
-		# with open(file, 'r') as f:
-		# 	raw_text = f.readlines()
-			
-		# # Transform each line into lower
-		# raw_text = [line.lower() for line in raw_text]
-		
-		# # Create a string which contains the entire text
-		# text_string = ''
-		# for line in raw_text:
-		# 	text_string += line.strip()
-		
-		# # Create an array by char
-		# text = list()
-		# for char in text_string:
-		# 	text.append(char)
-	
-		# # Remove all symbosl and just keep letters
-		# text = [char for char in text if char in letters]
-		
-		symbols = ['.',',','-','_','+','*','"','!','?','=','^','¨','{','}','[',']','$','%','&','/','(',')','|',';',':']
+		letters = ['a','b','c','d','e','f','g','h','i','j','k','l','m',
+					'n','o','p','q','r','s','t','u','v','w','x','y','z',' ']
 		
 		# Open raw file
 		with open(file, 'r') as f:
 			raw_text = f.readlines()
 			
 		# Transform each line into lower
-		raw_text = [line.lower().strip() for line in raw_text]
+		raw_text = [line.lower() for line in raw_text]
 		
 		# Create a string which contains the entire text
-		text = ''
-		for text_line in raw_text:
-			clean_text = ''
-			# Remove specific symblos
-			for char in text_line:
-				if char not in symbols:
-					clean_text += char
-			clean_text += ' '
-			text += clean_text
+		text_string = ''
+		for line in raw_text:
+			text_string += line.strip()
+		
+		# Create an array by char
+		text = list()
+		for char in text_string:
+			text.append(char)
+	
+		# Remove all symbosl and just keep letters
+		text = [char for char in text if char in letters]
+		
+		# symbols = ['.',',','-','_','+','*','"','!','?','=','^','¨','{','}','[',']','$','%','&','/','(',')','|',';',':']
+		
+		# # Open raw file
+		# with open(file, 'r') as f:
+		# 	raw_text = f.readlines()
+			
+		# # Transform each line into lower
+		# raw_text = [line.lower().strip() for line in raw_text]
+		
+		# # Create a string which contains the entire text
+		# text = ''
+		# for text_line in raw_text:
+		# 	clean_text = ''
+		# 	# Remove specific symblos
+		# 	for char in text_line:
+		# 		if char not in symbols:
+		# 			clean_text += char
+		# 	clean_text += ' '
+		# 	text += clean_text
 			
 			
 
-		# Entire text split by word
-		text = text.split()
+		# # Entire text split by word
+		# text = text.split()
 	
 		return text
 		

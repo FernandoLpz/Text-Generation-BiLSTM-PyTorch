@@ -66,7 +66,7 @@ class Execution:
 
 	def train(self, args):
 	
-		model = TextGenerator(args)
+		model = TextGenerator(args, self.vocab_size)
 	
 		training_set = DatasetMaper(self.sequences, self.targets)
 		loader_training = DataLoader(training_set, batch_size=self.batch_size)
@@ -80,7 +80,7 @@ class Execution:
 			model.train()
 			
 			for x_batch, y_batch in loader_training:
-	
+				
 				x = x_batch.type(torch.LongTensor)
 				y = y_batch.type(torch.LongTensor)
 			
@@ -96,12 +96,15 @@ class Execution:
 				
 				y_pred_idx = y_pred.squeeze().detach().numpy()
 				predictions += list(np.argmax(y_pred_idx, axis=1))
+				i+=1
 				
-			accuracy = self.calculate_accuracy(self.targets, predictions)
+			#accuracy = self.calculate_accuracy(self.targets, predictions)
+			# print("Epoch: %d,  loss: %.5f, accuracy: %.5f " % (epoch, loss.item(), accuracy))
+			print("Epoch: %d,  loss: %.5f " % (epoch, loss.item()))
 			
-			print("Epoch: %d,  loss: %.5f, accuracy: %.5f " % (epoch, loss.item(), accuracy))
 			
 		torch.save(model.state_dict(), 'weights/textGenerator_words_2.pt')
+		print(f"Model State: \n", model.state_dict())
 				
 	@staticmethod
 	def calculate_accuracy(y_true, y_pred):
@@ -113,7 +116,7 @@ class Execution:
 		return tp / len(y_true)
 	
 	@staticmethod
-	def generator(model, sequences, idx_to_word, generator):
+	def generator(model, sequences, idx_to_word, n_chars):
 		
 		model.eval()
 		
@@ -122,12 +125,12 @@ class Execution:
 		start = np.random.randint(0, len(sequences)-1)
 		pattern = sequences[start]
 		
-		print("Seed: \n")
-		print(' '.join([idx_to_word[value] for value in pattern]), "\"")
+		print("\nSeed: \n")
+		print(''.join([idx_to_word[value] for value in pattern]), "\"")
 		
 		full_prediction = pattern.copy()
 		
-		for i in range(generator):
+		for i in range(n_chars):
 		
 			pattern = torch.from_numpy(pattern).type(torch.LongTensor)
 			pattern = pattern.view(1,-1)
@@ -144,8 +147,8 @@ class Execution:
 
 			full_prediction = np.append(full_prediction, arg_max)
 			
-		print("Prediction: ")
-		print("\"", ' '.join([idx_to_word[value] for value in full_prediction]), "\"")
+		print("Prediction: \n")
+		print(''.join([idx_to_word[value] for value in full_prediction]), "\"")
 
 if __name__ == '__main__':
 	
@@ -163,7 +166,7 @@ if __name__ == '__main__':
 			sequences = execution.sequences
 			idx_to_word = execution.idx_to_word
 			
-			execution.generator(model, sequences, idx_to_word, 100)
+			execution.generator(model, sequences, idx_to_word, 1000)
 			
 	else:
 		execution = Execution(args)
@@ -172,8 +175,9 @@ if __name__ == '__main__':
 
 		sequences = execution.sequences
 		idx_to_word = execution.idx_to_word
+		vocab_size = execution.vocab_size
 		
-		model = TextGenerator(args)
+		model = TextGenerator(args, vocab_size)
 		model.load_state_dict(torch.load('weights/textGenerator_words_2.pt'))
 		
-		execution.generator(model, sequences, idx_to_word, 100)
+		execution.generator(model, sequences, idx_to_word, 1000)
