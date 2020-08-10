@@ -13,21 +13,6 @@ from src import TextGenerator
 from utils import Preprocessing
 from utils import parameter_parser
 
-
-class DatasetMaper(Dataset):
-	'''
-	Handles batches of dataset
-	'''
-	def __init__(self, x, y):
-		self.x = x
-		self.y = y
-		
-	def __len__(self):
-		return len(self.x)
-		
-	def __getitem__(self, idx):
-		return self.x[idx], self.y[idx]
-
 class Execution:
 
 	def __init__(self, args):
@@ -37,8 +22,8 @@ class Execution:
 		self.learning_rate = args.learning_rate
 		self.num_epochs = args.num_epochs
 		
-		self.sequences = None
 		self.targets = None
+		self.sequences = None
 		self.vocab_size = None
 		self.word_to_idx = None
 		self.idx_to_word = None
@@ -59,61 +44,54 @@ class Execution:
 		# Given the 'window', it is created the set of training sentences as well as
 		# the set of target words
 		self.sequences, self.targets = preprocessing.build_sequences_target(text, self.word_to_idx, window=self.window)
-		
+			
 		# Gets the vocabuly size
 		self.vocab_size = len(self.word_to_idx)
 		
 
 	def train(self, args):
 	
+		# Model initialization
 		model = TextGenerator(args, self.vocab_size)
-	
-		training_set = DatasetMaper(self.sequences, self.targets)
-		loader_training = DataLoader(training_set, batch_size=self.batch_size)
+		# Optimizer initialization
+		optimizer = optim.RMSprop(model.parameters(), lr=self.learning_rate)
+		# Defining number of batches
+		num_batches = int(len(self.sequences) / self.batch_size)
+		# Set model in training mode
+		model.train()
 		
-		optimizer = optim.Adam(model.parameters(), lr=self.learning_rate)
-		
+		# Training pahse
 		for epoch in range(self.num_epochs):
-		
-			predictions = []
+			# Mini batches
+			for i in range(num_batches):
 			
-			model.train()
+				# Batch definition
+				try:
+					x_batch = self.sequences[i * self.batch_size : (i + 1) * self.batch_size]
+					y_batch = self.targets[i * self.batch_size : (i + 1) * self.batch_size]
+				except:
+					x_batch = self.sequences[i * self.batch_size :]
+					y_batch = self.targets[i * self.batch_size :]
 			
-			for x_batch, y_batch in loader_training:
+				# Convert numpy array into torch tensors
+				x = torch.from_numpy(x_batch).type(torch.LongTensor)
+				y = torch.from_numpy(y_batch).type(torch.LongTensor)
 				
-				x = x_batch.type(torch.LongTensor)
-				y = y_batch.type(torch.LongTensor)
-			
+				# Feed the model
 				y_pred = model(x)
-				
+				# Loss calculation
 				loss = F.cross_entropy(y_pred, y.squeeze())
-					
+				# Clean gradients
 				optimizer.zero_grad()
-					
+				# Calculate gradientes
 				loss.backward()
-					
+				# Updated parameters
 				optimizer.step()
-				
-				y_pred_idx = y_pred.squeeze().detach().numpy()
-				predictions += list(np.argmax(y_pred_idx, axis=1))
-				i+=1
-				
-			#accuracy = self.calculate_accuracy(self.targets, predictions)
-			# print("Epoch: %d,  loss: %.5f, accuracy: %.5f " % (epoch, loss.item(), accuracy))
+			
 			print("Epoch: %d,  loss: %.5f " % (epoch, loss.item()))
 			
 			
 		torch.save(model.state_dict(), 'weights/textGenerator_words_2.pt')
-		print(f"Model State: \n", model.state_dict())
-				
-	@staticmethod
-	def calculate_accuracy(y_true, y_pred):
-		tp = 0
-		for true, pred in zip(y_true, y_pred):
-			if true == pred:
-				tp += 1
-				
-		return tp / len(y_true)
 	
 	@staticmethod
 	def generator(model, sequences, idx_to_word, n_chars):
@@ -166,7 +144,7 @@ if __name__ == '__main__':
 			sequences = execution.sequences
 			idx_to_word = execution.idx_to_word
 			
-			execution.generator(model, sequences, idx_to_word, 1000)
+			execution.generator(model, sequences, idx_to_word, 500)
 			
 	else:
 		execution = Execution(args)
@@ -180,4 +158,4 @@ if __name__ == '__main__':
 		model = TextGenerator(args, vocab_size)
 		model.load_state_dict(torch.load('weights/textGenerator_words_2.pt'))
 		
-		execution.generator(model, sequences, idx_to_word, 1000)
+		execution.generator(model, sequences, idx_to_word, 500)

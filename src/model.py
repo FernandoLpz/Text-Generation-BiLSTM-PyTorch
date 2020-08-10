@@ -15,41 +15,62 @@ class TextGenerator(nn.ModuleList):
 
 		self.sequence_len = args.window
 		
-		self.dropout = nn.Dropout(0.2)
+		self.dropout = nn.Dropout(0.0)
 		self.embedding = nn.Embedding(self.input_size, self.hidden_dim, padding_idx=0)
-		self.lstm_cell_1 = nn.LSTMCell(self.hidden_dim, self.hidden_dim)
-		self.fc_1 = nn.Linear(self.hidden_dim, self.num_classes)
+		self.lstm_cell_forward = nn.LSTMCell(self.hidden_dim, self.hidden_dim)
+		self.lstm_cell_backward = nn.LSTMCell(self.hidden_dim, self.hidden_dim)
+		self.lstm_cell = nn.LSTMCell(self.hidden_dim * 2, self.hidden_dim * 2)
+		
+		self.linear = nn.Linear(self.hidden_dim * 2, self.num_classes)
 		
 	def forward(self, x):
 	
 		# batch_size x hidden_size
-		hidden_state = torch.zeros(x.size(0), self.hidden_dim)
-		cell_state = torch.zeros(x.size(0), self.hidden_dim)
-		# hidden_state_2 = torch.zeros(x.size(0), self.hidden_dim)
-		# cell_state_2 = torch.zeros(x.size(0), self.hidden_dim)
+		hs_forward = torch.zeros(x.size(0), self.hidden_dim)
+		cs_forward = torch.zeros(x.size(0), self.hidden_dim)
+		hs_backward = torch.zeros(x.size(0), self.hidden_dim)
+		cs_backward = torch.zeros(x.size(0), self.hidden_dim)
+		hs_lstm = torch.zeros(x.size(0), self.hidden_dim * 2)
+		cs_lstm = torch.zeros(x.size(0), self.hidden_dim * 2)
 
 		# weights initialization
-		torch.nn.init.xavier_normal_(hidden_state)
-		torch.nn.init.xavier_normal_(cell_state)
-		# torch.nn.init.xavier_normal_(hidden_state_2)
-		# torch.nn.init.xavier_normal_(cell_state_2)
-		
+		torch.nn.init.kaiming_normal_(hs_forward)
+		torch.nn.init.kaiming_normal_(cs_forward)
+		torch.nn.init.kaiming_normal_(hs_backward)
+		torch.nn.init.kaiming_normal_(cs_backward)
+		torch.nn.init.kaiming_normal_(hs_lstm)
+		torch.nn.init.kaiming_normal_(cs_lstm)
+
 		# From idx to embedding
 		out = self.embedding(x)
 		
-		# Prepare the shape for LSTMCell
+		# Prepare the shape for LSTM Cells
 		out = out.view(self.sequence_len, x.size(0), -1)
 		
-		# Unfolding LSTM
-		# Last hidden_state will be used to feed the fully connected neural net
-		for i in range(self.sequence_len):
-		 	hidden_state, cell_state = self.lstm_cell_1(out[i], (hidden_state, cell_state))
-		 	hidden_state = self.dropout(hidden_state)
-		 	cell_state = self.dropout(cell_state)
-		 	
-		# Last hidden state is passed through a fully connected neural net
-		out = self.fc_1(hidden_state)
-
+		forward = []
+		backward = []
 		
+		# Unfolding Bi-LSTM
+		# Forward
+		for i in range(self.sequence_len):
+		 	hs_forward, cs_forward = self.lstm_cell_forward(out[i], (hs_forward, cs_forward))
+		 	forward.append(hs_forward)
+		 	
+		# Backward
+		for i in reversed(range(self.sequence_len)):
+		 	hs_backward, cs_backward = self.lstm_cell_backward(out[i], (hs_backward, cs_backward))
+		 	backward.append(hs_backward)
+		 	
+		# LSTM
+		for fwd, bwd in zip(forward, backward):
+			input_tensor = torch.cat((fwd, bwd), 1)
+			hs_lstm, cs_lstm = self.lstm_cell(input_tensor, (hs_lstm, cs_lstm))
+		 	
+		# Forward + Backward
+		# last_hidden_state = torch.cat((hs_forward, hs_backward), 1)
+
+		# Last hidden state is passed through a linear layer
+		out = self.linear(hs_lstm)
+
 		return out
 		

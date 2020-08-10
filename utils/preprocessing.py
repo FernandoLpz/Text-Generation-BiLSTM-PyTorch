@@ -28,31 +28,6 @@ class Preprocessing:
 	
 		# Remove all symbosl and just keep letters
 		text = [char for char in text if char in letters]
-		
-		# symbols = ['.',',','-','_','+','*','"','!','?','=','^','¨','{','}','[',']','$','%','&','/','(',')','|',';',':']
-		
-		# # Open raw file
-		# with open(file, 'r') as f:
-		# 	raw_text = f.readlines()
-			
-		# # Transform each line into lower
-		# raw_text = [line.lower().strip() for line in raw_text]
-		
-		# # Create a string which contains the entire text
-		# text = ''
-		# for text_line in raw_text:
-		# 	clean_text = ''
-		# 	# Remove specific symblos
-		# 	for char in text_line:
-		# 		if char not in symbols:
-		# 			clean_text += char
-		# 	clean_text += ' '
-		# 	text += clean_text
-			
-			
-
-		# # Entire text split by word
-		# text = text.split()
 	
 		return text
 		
