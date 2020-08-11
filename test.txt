@@ -1,2 +1,49 @@
-'weights/textGenerator_words_2.pt': python -B main.py --window 100 --epochs 500 --hidden_dim 32 --batch_size 512
-'weights/textGenerator_words_1.pt': python -B main.py --window 70 --epochs 200 --hidden_dim 32 --batch_size 512
+(TextGeneration-LSTMCell-PyTorch) [TextGeneration-LSTMCell-PyTorch]$ python -B main.py --window 80 --epochs 40 --hidden_dim 128 --batch_size 128 --learning_rate 0.001
+Vocab:  27
+Epoch: 0,  loss: 2.60293 
+Epoch: 1,  loss: 2.58230 
+Epoch: 2,  loss: 2.55336 
+Epoch: 3,  loss: 2.50268 
+Epoch: 4,  loss: 2.44022 
+Epoch: 5,  loss: 2.37014 
+Epoch: 6,  loss: 2.27402 
+Epoch: 7,  loss: 2.13738 
+Epoch: 8,  loss: 1.96105 
+Epoch: 9,  loss: 1.75734 
+Epoch: 10,  loss: 1.59495 
+Epoch: 11,  loss: 1.40901 
+Epoch: 12,  loss: 1.28658 
+Epoch: 13,  loss: 1.09528 
+Epoch: 14,  loss: 1.03073 
+Epoch: 15,  loss: 0.96796 
+Epoch: 16,  loss: 0.90493 
+Epoch: 17,  loss: 0.83610 
+Epoch: 18,  loss: 0.92057 
+Epoch: 19,  loss: 0.77905 
+Epoch: 20,  loss: 0.75144 
+Epoch: 21,  loss: 0.78950 
+Epoch: 22,  loss: 0.74645 
+Epoch: 23,  loss: 0.75024 
+Epoch: 24,  loss: 0.78005 
+Epoch: 25,  loss: 0.76699 
+Epoch: 26,  loss: 0.74643 
+Epoch: 27,  loss: 0.73800 
+Epoch: 28,  loss: 0.74585 
+Epoch: 29,  loss: 0.71086 
+Epoch: 30,  loss: 0.69719 
+Epoch: 31,  loss: 0.69415 
+Epoch: 32,  loss: 0.68394 
+Epoch: 33,  loss: 0.70251 
+Epoch: 34,  loss: 0.73034 
+Epoch: 35,  loss: 0.64348 
+Epoch: 36,  loss: 0.68090 
+Epoch: 37,  loss: 0.70344 
+Epoch: 38,  loss: 0.70608 
+Epoch: 39,  loss: 0.68216 
+
+Seed: 
+
+y well makethe journey to the north there was only one possible cause of anxiety "
+Prediction: 
+
+y well makethe journey to the north there was only one possible cause of anxiety wha  ee then ore the ours ikick aller thelestpacan as smea telllhe ng  ooe thin nstheedintneake watheckinsndahesskere w whnbee esesse ses waan be wes cestederttccae restlthe indave w ththevhll  a y llintfe she bhee ou tllll ththehullll t ne i thevean a the herd cos s w  we the tofof r velee thes t ee ien llllll an stedstthake t s y be akeellaitt g t ghellly aco toue an lll the tthe t a an p wabe wand i h whe d reha tter weho s hedllant inn the tha aleenthin ane icanth  thth on tth ack ind incth "

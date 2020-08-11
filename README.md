@@ -26,13 +26,16 @@ the saddle on."
 ```
 ## 2. The model
 The book is cleaned and preprocessed under the tokens based technique. The architecture of the model is made up of a Bi-LSTM layer followed by a unidirectional LSTM as well as a linear layer. The following image describes the model architecure. 
+<p align="center">
+<img src='img/bilstm.jpg'>
+</p>
 
 ## 3. How to use
 In order to install the correct versions of each dependency, it is highly suggested to work under a virtual environment. In this case, I'm using the ``pipenv`` environment. To install the dependencies you just need type:
-´´´
+```
 pipenv install
-´´´
+```
 then, in order to lauch the environment you would need to type:
-´´´
+```
 pipenv shell
-´´´
+```
