@@ -34,37 +34,37 @@ class Preprocessing:
 	@staticmethod
 	def create_dictionary(text):
 		
-		word_to_idx = dict()
-		idx_to_word = dict()
+		char_to_idx = dict()
+		idx_to_char = dict()
 		
 		idx = 0
-		for word in text:
-			if word not in word_to_idx.keys():
-				word_to_idx[word] = idx
-				idx_to_word[idx] = word
+		for char in text:
+			if char not in char_to_idx.keys():
+				char_to_idx[char] = idx
+				idx_to_char[idx] = char
 				idx += 1
 				
-		print("Vocab: ", len(word_to_idx))
+		print("Vocab: ", len(char_to_idx))
 		
-		return word_to_idx, idx_to_word
+		return char_to_idx, idx_to_char
 		
 	@staticmethod
-	def build_sequences_target(text, word_to_idx, window):
+	def build_sequences_target(text, char_to_idx, window):
 		
 		x = list()
 		y = list()
 	
 		for i in range(len(text)):
 			try:
-				# Get window of words from text
+				# Get window of chars from text
 				# Then, transform it into its idx representation
 				sequence = text[i:i+window]
-				sequence = [word_to_idx[word] for word in sequence]
+				sequence = [char_to_idx[char] for char in sequence]
 				
-				# Get word target
+				# Get char target
 				# Then, transfrom it into its idx representation
 				target = text[i+window]
-				target = word_to_idx[target]
+				target = char_to_idx[target]
 				
 				# Save sequences and targets
 				x.append(sequence)

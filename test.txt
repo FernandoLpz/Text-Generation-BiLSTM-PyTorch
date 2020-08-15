@@ -47,3 +47,64 @@ y well makethe journey to the north there was only one possible cause of anxiety
 Prediction: 
 
 y well makethe journey to the north there was only one possible cause of anxiety wha  ee then ore the ours ikick aller thelestpacan as smea telllhe ng  ooe thin nstheedintneake watheckinsndahesskere w whnbee esesse ses waan be wes cestederttccae restlthe indave w ththevhll  a y llintfe she bhee ou tllll ththehullll t ne i thevean a the herd cos s w  we the tofof r velee thes t ee ien llllll an stedstthake t s y be akeellaitt g t ghellly aco toue an lll the tthe t a an p wabe wand i h whe d reha tter weho s hedllant inn the tha aleenthin ane icanth  thth on tth ack ind incth "
+
+(TextGeneration-LSTMCell-PyTorch) [TextGeneration-LSTMCell-PyTorch]$ python -B main.py --window 100 --epochs 50 --hidden_dim 128 --batch_size 128 --learning_rate 0.001
+Vocab:  27
+Epoch: 0,  loss: 2.58192 
+Epoch: 1,  loss: 2.55177 
+Epoch: 2,  loss: 2.52361 
+Epoch: 3,  loss: 2.47581 
+Epoch: 4,  loss: 2.40268 
+Epoch: 5,  loss: 2.30805 
+Epoch: 6,  loss: 2.17688 
+Epoch: 7,  loss: 2.00668 
+Epoch: 8,  loss: 1.81434 
+Epoch: 9,  loss: 1.61560 
+Epoch: 10,  loss: 1.39003 
+Epoch: 11,  loss: 1.19139 
+Epoch: 12,  loss: 1.00478 
+Epoch: 13,  loss: 0.87187 
+Epoch: 14,  loss: 0.77020 
+Epoch: 15,  loss: 0.71238 
+Epoch: 16,  loss: 0.65528 
+Epoch: 17,  loss: 0.55694 
+Epoch: 18,  loss: 0.57767 
+Epoch: 19,  loss: 0.54940 
+Epoch: 20,  loss: 0.47865 
+Epoch: 21,  loss: 0.47928 
+Epoch: 22,  loss: 0.49121 
+Epoch: 23,  loss: 0.49846 
+Epoch: 24,  loss: 0.48859 
+Epoch: 25,  loss: 0.44059 
+Epoch: 26,  loss: 0.46123 
+Epoch: 27,  loss: 0.48412 
+Epoch: 28,  loss: 0.45144 
+Epoch: 29,  loss: 0.47965 
+Epoch: 30,  loss: 0.46919 
+Epoch: 31,  loss: 0.47918 
+Epoch: 32,  loss: 0.41156 
+Epoch: 33,  loss: 0.40054 
+Epoch: 34,  loss: 0.42605 
+Epoch: 35,  loss: 0.48772 
+Epoch: 36,  loss: 0.43010 
+Epoch: 37,  loss: 0.41330 
+Epoch: 38,  loss: 0.48529 
+Epoch: 39,  loss: 0.45168 
+Epoch: 40,  loss: 0.43162 
+Epoch: 41,  loss: 0.39834 
+Epoch: 42,  loss: 0.38547 
+Epoch: 43,  loss: 0.38127 
+Epoch: 44,  loss: 0.38382 
+Epoch: 45,  loss: 0.42938 
+Epoch: 46,  loss: 0.39915 
+Epoch: 47,  loss: 0.40632 
+Epoch: 48,  loss: 0.39338 
+Epoch: 49,  loss: 0.38377 
+
+Seed: 
+
+one of the prairie swellswhich gave a little wider view than most of them jack saw quite closeto the "
+Prediction: 
+
+one of the prairie swellswhich gave a little wider view than most of them jack saw quite closeto the wnd banngessejang boffff we outheaedd we band r hes tller a reacarof t t alethe ngothered uhe th wengaco ack fof ace ca  e s alee bin  cacotee tharss th band fofoutod we we ins sange trre anca y w farer we sewigalfetwher d e  we n s shed pack wngaingh tthe we the we javes t supun f the har man bllle s ng ou   y anghe ond we nd ba a  she t t anthendwe wn me anom ly tceaig t i isesw arawns t d ks wao thalac tharr jad  d anongive whea tha awe w we he is ma mie cack seat sesant sns t imes hethof riges we he d ooushe he hang tout f t thu inong bll llveco we se s the he haa is s igg merin ishe d t san wack owhe o or th we sbe se we we inange t ts wan br seyomanthe harntho thengn  th me ny we ke in acor offff  of wan  s arghe we t angorro the wand be thinga sth t tha alelllll willllsse of s wed w brstougof bage orore he anthesww were ofawe ce qur the he sbaing tthe bytondece nd t llllifsffo acke o t in ir me hedlff scewant pi t bri pi owasem the awh thorathas th we hed ofainginictoplid we me "
+(TextGeneration-LSTMCell-PyTorch) [TextGeneration-LSTMCell-PyTorch]$ ;2A;2A;2A

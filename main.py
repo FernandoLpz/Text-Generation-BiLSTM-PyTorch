@@ -25,28 +25,28 @@ class Execution:
 		self.targets = None
 		self.sequences = None
 		self.vocab_size = None
-		self.word_to_idx = None
-		self.idx_to_word = None
+		self.char_to_idx = None
+		self.idx_to_char = None
 		
 	def prepare_data(self):
 	
 		# Initialize preprocessor object
 		preprocessing = Preprocessing()
 		
-		# The 'file' is loaded and split by word
+		# The 'file' is loaded and split by char
 		text = preprocessing.read_dataset(self.file)
 		
 		# Given 'text', it is created two dictionaries
-		# a dictiornary about: from word to index
-		# a dictorionary about: from index to word
-		self.word_to_idx, self.idx_to_word = preprocessing.create_dictionary(text)
+		# a dictiornary about: from char to index
+		# a dictorionary about: from index to char
+		self.char_to_idx, self.idx_to_char = preprocessing.create_dictionary(text)
 		
 		# Given the 'window', it is created the set of training sentences as well as
-		# the set of target words
-		self.sequences, self.targets = preprocessing.build_sequences_target(text, self.word_to_idx, window=self.window)
+		# the set of target chars
+		self.sequences, self.targets = preprocessing.build_sequences_target(text, self.char_to_idx, window=self.window)
 			
 		# Gets the vocabuly size
-		self.vocab_size = len(self.word_to_idx)
+		self.vocab_size = len(self.char_to_idx)
 		
 
 	def train(self, args):
@@ -91,10 +91,10 @@ class Execution:
 			print("Epoch: %d,  loss: %.5f " % (epoch, loss.item()))
 			
 			
-		torch.save(model.state_dict(), 'weights/textGenerator_words_2.pt')
+		torch.save(model.state_dict(), 'weights/textGenerator_chars_2.pt')
 	
 	@staticmethod
-	def generator(model, sequences, idx_to_word, n_chars):
+	def generator(model, sequences, idx_to_char, n_chars):
 		
 		model.eval()
 		
@@ -104,7 +104,7 @@ class Execution:
 		pattern = sequences[start]
 		
 		print("\nSeed: \n")
-		print(''.join([idx_to_word[value] for value in pattern]), "\"")
+		print(''.join([idx_to_char[value] for value in pattern]), "\"")
 		
 		full_prediction = pattern.copy()
 		
@@ -126,7 +126,7 @@ class Execution:
 			full_prediction = np.append(full_prediction, arg_max)
 			
 		print("Prediction: \n")
-		print(''.join([idx_to_word[value] for value in full_prediction]), "\"")
+		print(''.join([idx_to_char[value] for value in full_prediction]), "\"")
 
 if __name__ == '__main__':
 	
@@ -136,15 +136,15 @@ if __name__ == '__main__':
 		if os.path.exists(args.model):
 			
 			model = TextGenerator(args)
-			model.load_state_dict(torch.load('weights/textGenerator_words_2.pt'))
+			model.load_state_dict(torch.load('weights/textGenerator_chars_2.pt'))
 			
 			execution = Execution(args)
 			execution.prepare_data()
 			
 			sequences = execution.sequences
-			idx_to_word = execution.idx_to_word
+			idx_to_char = execution.idx_to_char
 			
-			execution.generator(model, sequences, idx_to_word, 500)
+			execution.generator(model, sequences, idx_to_char, 1000)
 			
 	else:
 		execution = Execution(args)
@@ -152,10 +152,10 @@ if __name__ == '__main__':
 		execution.train(args)
 
 		sequences = execution.sequences
-		idx_to_word = execution.idx_to_word
+		idx_to_char = execution.idx_to_char
 		vocab_size = execution.vocab_size
 		
 		model = TextGenerator(args, vocab_size)
-		model.load_state_dict(torch.load('weights/textGenerator_words_2.pt'))
+		model.load_state_dict(torch.load('weights/textGenerator_chars_2.pt'))
 		
-		execution.generator(model, sequences, idx_to_word, 500)
+		execution.generator(model, sequences, idx_to_char, 1000)
