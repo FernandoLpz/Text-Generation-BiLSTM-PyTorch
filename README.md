@@ -2,6 +2,9 @@
 
 This repository presents a model for text generation using Bi-LSTM and LSTM recurrent neural networks. The model is implemented using PyTorch's LSTMCells. 
 
+If you want to read the details of these Text Generator model, I highly suggest to read the blog:
+<a href="/">Text Generation with Bi-LSTM in PyTorch</a>
+
 ## 1. Files
 - The ``data`` directory contains the text which we will work with. 
 - The ``src`` directory contains the file ``model.py``which contains the neural net definition
@@ -46,5 +49,13 @@ python -B main.py --window 100 --epochs 50 --hidden_dim 128 --batch_size 128 --l
 The weights of the trained model are stored in the ``weights/``directory. 
 To generate text, we are going to load the weights of the trained model as follows:
 ```
-python -B main.py --load_model True --model [your_model.pt]
+python -B main.py --load_model True --model [weights/your_model.pt]
+```
+The text generated is:
+```
+Seed:
+one of the prairie swellswhich gave a little wider view than most of them jack saw quite close to the
+
+Prediction:
+one of the prairie swellswhich gave a little wider view than most of them jack saw quite close to the wnd banngessejang boffff we outheaedd we band r hes tller a reacarof t t alethe ngothered uhe th wengaco ack fof ace ca  e s alee bin  cacotee tharss th band fofoutod we we ins sange trre anca y w farer we sewigalfetwher d e  we n s shed pack wngaingh tthe we the we javes t supun f the har man bllle s ng ou   y anghe ond we nd ba a  she t t anthendwe wn me anom ly tceaig t i isesw arawns t d ks wao thalac tharr jad  d anongive where the awe w we he is ma mie cack seat sesant sns t imes hethof riges we he d ooushe he hang out f t thu inong bll llveco we see s the he haa is s igg merin ishe d t san wack owhe o or th we sbe se we we inange t ts wan br seyomanthe harntho thengn  th me ny we ke in acor offff  of wan  s arghe we t angorro the wand be thing a sth t tha alelllll willllsse of s wed w brstougof bage orore he anthesww were ofawe ce qur the he sbaing tthe bytondece nd t llllifsffo acke o t in ir me hedlff scewant pi t bri pi owasem the awh thorathas th we hed ofainginictoplid we me
 ```
